@@ -60,9 +60,10 @@ https://github.com/felixlau25-eng/shengxiao-storybook
 
 GitHub 除了存放程式，也可以把倉庫變成公開網頁，叫做 **GitHub Pages**。
 
-設定位置：倉庫頁面 → **Settings** → 左欄 **Pages** → Source 選 `main` 和 `/ (root)`。
+設定位置：倉庫頁面 → **Settings** → 左欄 **Pages** → Source 選 `Deploy from a branch`，Branch 選 `main`，資料夾選 `/ (root)`，然後 **Save**。
 
-這個倉庫已經打開 Pages，所以老師和家長只要開上面的網址即可，不用安裝任何軟件。
+做法和「新小小默寫家」相同。打開後，網址會是：
+https://felixlau25-eng.github.io/shengxiao-storybook/
 
 ### 4. 下次自己做一個新專案（網頁操作）
 
