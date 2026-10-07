@@ -90,22 +90,22 @@ window.STORIES = [
       {
         caption: "操場上，有同學跑步時跌倒了。",
         hint: "發生了什麼事？誰受傷？",
-        image: "comics/fall/1.jpg",
+        image: "comics/fall/1.jpg?v=2",
       },
       {
         caption: "其他人繼續跑，樂樂停下來走過去。",
         hint: "別的小朋友怎樣？樂樂怎樣？",
-        image: "comics/fall/2.jpg",
+        image: "comics/fall/2.jpg?v=2",
       },
       {
         caption: "樂樂和安安扶起同學，陪他走。",
         hint: "他們怎樣幫助同學？",
-        image: "comics/fall/3.jpg",
+        image: "comics/fall/3.jpg?v=2",
       },
       {
         caption: "護士幫同學搽藥，同學多謝樂樂。",
         hint: "後來誰來幫忙？結果怎樣？",
-        image: "comics/fall/4.jpg",
+        image: "comics/fall/4.jpg?v=2",
       },
     ],
     starters: [
@@ -322,17 +322,17 @@ window.STORIES = [
       {
         caption: "安安看見同學難過，看了看自己的食物。",
         hint: "安安發現了什麼？她的心情怎樣？",
-        image: "comics/lunch/2.jpg",
+        image: "comics/lunch/2.jpg?v=2",
       },
       {
         caption: "安安把三文治分開，分給同學。",
         hint: "她怎樣幫助同學？",
-        image: "comics/lunch/3.jpg",
+        image: "comics/lunch/3.jpg?v=2",
       },
       {
         caption: "兩人一起吃飯，都笑了。",
         hint: "結果怎樣？分享之後有什麼感覺？",
-        image: "comics/lunch/4.jpg",
+        image: "comics/lunch/4.jpg?v=2",
       },
     ],
     starters: [
