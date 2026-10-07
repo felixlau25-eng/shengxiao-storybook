@@ -317,22 +317,22 @@ window.STORIES = [
       {
         caption: "飯堂裏，安安有午餐，對面同學什麼也沒有。",
         hint: "兩個人有什麼不同？",
-        image: "comics/lunch/1.jpg",
+        image: "comics/lunch/1.jpg?v=3",
       },
       {
         caption: "安安看見同學難過，看了看自己的食物。",
         hint: "安安發現了什麼？她的心情怎樣？",
-        image: "comics/lunch/2.jpg?v=2",
+        image: "comics/lunch/2.jpg?v=3",
       },
       {
         caption: "安安把三文治分開，分給同學。",
         hint: "她怎樣幫助同學？",
-        image: "comics/lunch/3.jpg?v=2",
+        image: "comics/lunch/3.jpg?v=3",
       },
       {
         caption: "兩人一起吃飯，都笑了。",
         hint: "結果怎樣？分享之後有什麼感覺？",
-        image: "comics/lunch/4.jpg?v=2",
+        image: "comics/lunch/4.jpg?v=3",
       },
     ],
     starters: [
