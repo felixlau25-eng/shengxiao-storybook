@@ -361,20 +361,30 @@ function playCorrect() {
   const ctx = playCorrect.ctx;
   if (ctx.state === "suspended") ctx.resume();
   const now = ctx.currentTime;
-  [523.25, 659.25, 783.99].forEach((freq, i) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.value = freq;
-    const start = now + i * 0.08;
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(0.2, start + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(start);
-    osc.stop(start + 0.34);
-  });
+  [0, 0.16, 0.32].forEach((offset) => clapAt(ctx, now + offset));
+}
+
+function clapAt(ctx, time) {
+  const duration = 0.12;
+  const length = Math.floor(ctx.sampleRate * duration);
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.value = 1600;
+  filter.Q.value = 0.8;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.0001, time);
+  gain.gain.exponentialRampToValueAtTime(0.55, time + 0.004);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  noise.start(time);
+  noise.stop(time + duration);
 }
 
 function bindThink(story) {
