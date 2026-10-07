@@ -10,24 +10,26 @@
   --primary-fg: #f3ede1;
   --shadow: 0 0 0 1px rgba(28, 24, 20, 0.08), 0 1px 2px -1px rgba(28, 24, 20, 0.06),
     0 2px 8px 0 rgba(28, 24, 20, 0.04);
-  --font-sans: "Noto Sans TC", "PingFang HK", "Noto Sans", system-ui, sans-serif;
-  --font-display: "Noto Serif TC", "Songti TC", serif;
+  --font-sans: "LXGW WenKai TC", "Noto Sans TC", "PingFang HK", system-ui, sans-serif;
+  --font-display: "LXGW WenKai TC", "Noto Sans TC", "PingFang HK", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; }
+html { -webkit-font-smoothing: antialiased; font-size: 20px; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  line-height: 1.55;
+  font-size: 1.15rem;
+  line-height: 1.75;
 }
 h1, h2, h3 {
   font-family: var(--font-display);
   text-wrap: balance;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
 }
 a { color: inherit; text-decoration: none; }
 button, [role="button"] { cursor: pointer; font-family: inherit; }
@@ -48,8 +50,8 @@ header.site {
 .site-inner {
   max-width: 72rem;
   margin: 0 auto;
-  height: 3.5rem;
-  padding: 0 1.25rem;
+  min-height: 4rem;
+  padding: 0.4rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -67,11 +69,11 @@ nav a {
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
 }
 nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 
-.kicker { color: var(--primary); font-size: 0.875rem; font-weight: 500; }
+.kicker { color: var(--primary); font-size: 1.05rem; font-weight: 700; }
 .muted { color: var(--muted); }
 .subtle { color: var(--subtle); }
 
@@ -79,7 +81,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 1.1fr 0.9fr; }
 }
-.hero h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; margin: 0.4rem 0; }
+.hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.3; margin: 0.4rem 0; }
 .hero h1 span { display: block; color: var(--muted); }
 
 .row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
@@ -93,7 +95,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 }
 .chars figure:nth-child(2) { margin-top: 1.5rem; }
 .chars img { aspect-ratio: 3/4; object-fit: cover; object-position: top; }
-.chars figcaption { padding: 0.5rem 0.75rem; font-size: 0.9rem; color: var(--muted); }
+.chars figcaption { padding: 0.6rem 0.85rem; font-size: 1.1rem; color: var(--fg); }
 
 .btn {
   display: inline-flex;
@@ -103,14 +105,14 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   padding: 0 1rem;
   border: 0;
   border-radius: 12px;
-  font-weight: 500;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 .btn-primary { background: var(--primary); color: var(--primary-fg); }
 .btn-primary:hover { background: var(--primary-hover); }
 .btn-secondary { background: var(--surface); color: var(--fg); box-shadow: var(--shadow); }
 .btn-ghost { background: transparent; color: var(--fg); }
-.btn-sm { min-height: 2.25rem; font-size: 0.85rem; padding: 0 0.75rem; border-radius: 8px; }
+.btn-sm { min-height: 2.75rem; font-size: 1.05rem; padding: 0 0.9rem; border-radius: 8px; }
 
 .grid-4 { display: grid; gap: 0.75rem; }
 @media (min-width: 640px) { .grid-4 { grid-template-columns: 1fr 1fr; } }
@@ -121,7 +123,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   padding: 1rem;
   box-shadow: var(--shadow);
 }
-.step b { display: block; font-family: var(--font-display); font-size: 1.1rem; margin: 0.2rem 0; }
+.step b { display: block; font-family: var(--font-display); font-size: 1.3rem; margin: 0.2rem 0; }
 
 .cards { display: grid; gap: 1rem; }
 @media (min-width: 700px) { .cards { grid-template-columns: 1fr 1fr; } }
@@ -135,8 +137,8 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 .thumbs { display: grid; grid-template-columns: repeat(4, 1fr); }
 .thumbs img { aspect-ratio: 3/2; object-fit: cover; }
 .card-body { padding: 1rem; }
-.meta { font-size: 0.75rem; font-weight: 500; color: var(--primary); }
-.card h3 { margin: 0.3rem 0; font-size: 1.25rem; }
+.meta { font-size: 1rem; font-weight: 700; color: var(--primary); }
+.card h3 { margin: 0.3rem 0; font-size: 1.5rem; }
 
 .comic {
   display: grid;
@@ -158,8 +160,8 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   position: absolute;
   left: 0.4rem;
   top: 0.4rem;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
   display: grid;
   place-items: center;
   background: var(--primary);
@@ -173,8 +175,8 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 .hint {
   display: block;
   padding: 0.4rem 0.6rem;
-  font-size: 0.8rem;
-  color: var(--muted);
+  font-size: 1.15rem;
+  color: var(--fg);
   background: var(--surface);
   border-top: 1px solid rgba(28, 24, 20, 0.08);
 }
@@ -216,7 +218,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 .think { margin-top: 1.5rem; background: var(--surface); border-radius: 20px; padding: 1.25rem; box-shadow: var(--shadow); }
 .think h2 { margin: 0.15rem 0 0.35rem; }
 .think-q { margin-top: 1.25rem; }
-.think-ask { margin: 0; font-size: 1.05rem; }
+.think-ask { margin: 0; font-size: 1.4rem; line-height: 1.6; }
 .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
 @media (min-width: 640px) {
   .choice-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -231,14 +233,14 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   padding: 0.75rem;
   touch-action: manipulation;
 }
-.choice .ico { font-size: 2.4rem; line-height: 1; }
+.choice .ico { font-size: 2.8rem; line-height: 1; }
 .choice.on-good { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
 .choice.on-think { background: #fff4d6; border-color: #c4a15a; }
-.say { margin: 0.75rem 0 0; background: var(--bg); border-radius: 12px; padding: 0.75rem 1rem; line-height: 1.6; }
+.say { margin: 0.75rem 0 0; background: var(--bg); border-radius: 12px; padding: 0.85rem 1rem; line-height: 1.7; font-size: 1.2rem; }
 
 .lightbox {
   position: fixed;
@@ -257,7 +259,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow);
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   color: var(--muted);
   border: 0;
 }
