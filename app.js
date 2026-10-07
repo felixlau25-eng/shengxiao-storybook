@@ -356,7 +356,7 @@ function bindStory(story) {
 
 function playCorrect() {
   if (!playCorrect.audio) {
-    playCorrect.audio = new Audio("sounds/holek.mp3");
+    playCorrect.audio = new Audio("sounds/daak.mp3");
     playCorrect.audio.preload = "auto";
   }
   const audio = playCorrect.audio;
