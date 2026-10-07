@@ -78,6 +78,33 @@ window.STORIES = [
     ],
     teacherNote:
       "這是升小面試最常見的題型。提醒學生不要只說「見到錢包」就停，一定要講「然後怎樣做」和「為什麼這樣做」。可追問：錢包裏有錢，為什麼還要交出去？",
+    think: [
+      {
+        id: "pick",
+        q: "你會把錢包撿起嗎？",
+        options: [
+          { id: "yes", label: "會", icon: "🙌", good: true, say: "撿起來，就可以交還給失主。" },
+          { id: "no", label: "不會", icon: "🚶", say: "如果走開，失主就找不到錢包了。可以叫大人一起撿。" },
+        ],
+      },
+      {
+        id: "who",
+        q: "你會把錢包交給誰？",
+        options: [
+          { id: "mom", label: "媽媽", icon: "👩", good: true, say: "交給認識的大人，他們會幫你找失主。" },
+          { id: "police", label: "警察", icon: "👮", good: true, say: "交給警察或管理員，都是正確的做法。" },
+          { id: "stranger", label: "路人", icon: "🧑", say: "不認識的人未必能還給失主。交給爸爸媽媽、老師或警察更安全。" },
+        ],
+      },
+      {
+        id: "keep",
+        q: "錢包裏的錢，可以自己用嗎？",
+        options: [
+          { id: "no", label: "不可以", icon: "🙅", good: true, say: "錢不是自己的，不可以拿走。" },
+          { id: "yes", label: "可以", icon: "💰", say: "這不是自己的錢。誠實的孩子會交還給人。" },
+        ],
+      },
+    ],
   },
   {
     id: "fall",
@@ -154,6 +181,33 @@ window.STORIES = [
     ],
     teacherNote:
       "面試官愛問「如果傷得很重呢？」引導孩子說：先叫老師，不要自己亂搬。也可問「幫助別人時自己安全嗎？」",
+    think: [
+      {
+        id: "stop",
+        q: "見到同學跌倒，你會停下來嗎？",
+        options: [
+          { id: "yes", label: "會", icon: "🛑", good: true, say: "停下來，才可以幫助同學。" },
+          { id: "no", label: "不會", icon: "🏃", say: "如果繼續跑，同學可能沒有人幫忙。" },
+        ],
+      },
+      {
+        id: "how",
+        q: "你會怎樣幫他？",
+        options: [
+          { id: "help", label: "扶他起來", icon: "🤝", good: true, say: "輕輕扶他，再看看他傷得嚴不嚴重。" },
+          { id: "run", label: "繼續跑", icon: "👟", say: "繼續跑就不能幫助同學了。" },
+          { id: "teacher", label: "告訴老師", icon: "👩‍🏫", good: true, say: "傷得重的時候，要先告訴老師，不要自己亂搬。" },
+        ],
+      },
+      {
+        id: "where",
+        q: "你會帶他去哪裏？",
+        options: [
+          { id: "nurse", label: "醫務室", icon: "🩹", good: true, say: "去醫務室，護士可以幫他搽藥。" },
+          { id: "play", label: "繼續玩", icon: "⚽", say: "他的膝蓋受傷了，要先處理傷口。" },
+        ],
+      },
+    ],
   },
   {
     id: "queue",
@@ -230,6 +284,33 @@ window.STORIES = [
     ],
     teacherNote:
       "進階題：考觀察（誰不守規）和社交語言。示範句：「唔好意思，請你去後面排隊。」避免孩子說「我打佢／我推佢」。",
+    think: [
+      {
+        id: "cut",
+        q: "有人插隊，你會怎樣？",
+        options: [
+          { id: "ask", label: "請他排後面", icon: "🙋", good: true, say: "可以有禮貌地說：請你去後面排隊。" },
+          { id: "also", label: "我也插隊", icon: "🏃", say: "人人都插隊就不公平了。" },
+          { id: "quiet", label: "不說話", icon: "😶", say: "可以告訴老師，或者好好提醒同學。" },
+        ],
+      },
+      {
+        id: "buy",
+        q: "買東西的時候，你會怎樣？",
+        options: [
+          { id: "line", label: "排隊", icon: "🧍", good: true, say: "排隊是守規則，大家輪流買。" },
+          { id: "front", label: "走到最前", icon: "⏩", say: "走到最前面就是插隊，其他人會不高興。" },
+        ],
+      },
+      {
+        id: "shout",
+        q: "你會大聲罵插隊的人嗎？",
+        options: [
+          { id: "no", label: "不會，好好說", icon: "💬", good: true, say: "好好說，同學才聽得明白。" },
+          { id: "yes", label: "會罵他", icon: "😠", say: "罵人容易吵架。用禮貌的說話提醒就可以。" },
+        ],
+      },
+    ],
   },
   {
     id: "litter",
@@ -305,6 +386,33 @@ window.STORIES = [
     ],
     teacherNote:
       "可延伸分類：紙、膠、鋁罐。香港面試常考環保。提醒：執垃圾後要洗手。",
+    think: [
+      {
+        id: "pick",
+        q: "見到地上有膠樽，你會撿起來嗎？",
+        options: [
+          { id: "yes", label: "會", icon: "🥤", good: true, say: "撿起來，草地就乾淨了。" },
+          { id: "no", label: "不會", icon: "🙈", say: "垃圾留在地上，草地會變髒。" },
+        ],
+      },
+      {
+        id: "bin",
+        q: "膠樽應該放進哪裏？",
+        options: [
+          { id: "recycle", label: "回收箱", icon: "♻️", good: true, say: "膠樽放回收箱，可以再造成有用的東西。" },
+          { id: "trash", label: "垃圾桶", icon: "🗑️", say: "放垃圾桶也可以，但膠樽放回收箱更好。" },
+          { id: "ground", label: "留在地上", icon: "🌿", say: "不要留在草地上，動物和小朋友都可能受傷。" },
+        ],
+      },
+      {
+        id: "throw",
+        q: "你會把垃圾扔在草地上嗎？",
+        options: [
+          { id: "no", label: "不會", icon: "🙅", good: true, say: "垃圾要放進回收箱或垃圾桶。" },
+          { id: "yes", label: "會", icon: "😬", say: "草地是大家玩的地方，不要扔垃圾。" },
+        ],
+      },
+    ],
   },
   {
     id: "lunch",
@@ -380,6 +488,33 @@ window.STORIES = [
     ],
     teacherNote:
       "可追問衛生：分享前洗手；過敏食物不要亂分。也引導：先告訴老師是更安全的做法。",
+    think: [
+      {
+        id: "share",
+        q: "同學沒有午餐，你會分給他嗎？",
+        options: [
+          { id: "yes", label: "會", icon: "🥪", good: true, say: "看見同學難過，可以把自己的食物分一點給他。" },
+          { id: "no", label: "不會", icon: "🍱", say: "同學肚子餓會很辛苦。可以分一半給他。" },
+        ],
+      },
+      {
+        id: "howmuch",
+        q: "你會分多少？",
+        options: [
+          { id: "half", label: "分一半", icon: "🤝", good: true, say: "分一半，兩個人都可以吃。" },
+          { id: "all", label: "全部給他", icon: "🍽️", say: "分享很好，不過自己也要吃。分一半就剛剛好。" },
+          { id: "none", label: "不分", icon: "🚫", say: "不分的話，同學還是沒有午餐。" },
+        ],
+      },
+      {
+        id: "feel",
+        q: "分享之後，你會覺得怎樣？",
+        options: [
+          { id: "happy", label: "開心", icon: "😊", good: true, say: "兩個人一起吃，大家都會笑。" },
+          { id: "sad", label: "不開心", icon: "😢", say: "分一點食物，自己還有得吃，同學也會多謝你。" },
+        ],
+      },
+    ],
   },
   {
     id: "vase",
@@ -456,5 +591,32 @@ window.STORIES = [
     ],
     teacherNote:
       "升小很愛考「做錯事怎麼辦」。孩子要講出道歉句，不要只說「我會乖」。可問：以後還能在客廳玩球嗎？引導說出安全做法。",
+    think: [
+      {
+        id: "tell",
+        q: "不小心打破花瓶，你會怎樣？",
+        options: [
+          { id: "mom", label: "告訴媽媽", icon: "👩", good: true, say: "立刻說對不起，媽媽才知道怎樣幫忙。" },
+          { id: "hide", label: "藏起碎片", icon: "🙈", say: "藏起來更危險，也可能割到手。" },
+          { id: "blame", label: "說是別人打破", icon: "🙅", say: "不是自己做的不要說。要誠實認錯。" },
+        ],
+      },
+      {
+        id: "sweep",
+        q: "你會幫媽媽掃地嗎？",
+        options: [
+          { id: "yes", label: "會", icon: "🧹", good: true, say: "一起收拾，不過碎玻璃要讓大人來掃。" },
+          { id: "no", label: "不會", icon: "🚶", say: "弄壞了東西，可以幫忙收拾。危險的碎片交給大人。" },
+        ],
+      },
+      {
+        id: "sorry",
+        q: "打破東西，要不要認錯？",
+        options: [
+          { id: "yes", label: "要", icon: "🙋", good: true, say: "說「對不起，是我不小心打破的。」" },
+          { id: "no", label: "不要", icon: "🤫", say: "不認錯，媽媽會更擔心。誠實認錯才是勇敢。" },
+        ],
+      },
+    ],
   },
 ];

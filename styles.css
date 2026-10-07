@@ -213,6 +213,33 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   margin: 0.4rem 0;
 }
 
+.think { margin-top: 1.5rem; background: var(--surface); border-radius: 20px; padding: 1.25rem; box-shadow: var(--shadow); }
+.think h2 { margin: 0.15rem 0 0.35rem; }
+.think-q { margin-top: 1.25rem; }
+.think-ask { margin: 0; font-size: 1.05rem; }
+.choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
+@media (min-width: 640px) {
+  .choice-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.choice {
+  min-height: 7rem;
+  border: 2px solid rgba(28, 24, 20, 0.12);
+  background: var(--bg);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 1.05rem;
+  padding: 0.75rem;
+  touch-action: manipulation;
+}
+.choice .ico { font-size: 2.4rem; line-height: 1; }
+.choice.on-good { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+.choice.on-think { background: #fff4d6; border-color: #c4a15a; }
+.say { margin: 0.75rem 0 0; background: var(--bg); border-radius: 12px; padding: 0.75rem 1rem; line-height: 1.6; }
+
 .lightbox {
   position: fixed;
   inset: 0;

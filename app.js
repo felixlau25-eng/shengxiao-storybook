@@ -171,9 +171,41 @@ const state = {
   revealed: 4,
   hints: false,
   tab: "guide",
+  picks: {},
   interview: { phase: "pick", story: null, seconds: 30, q: 0, checks: [] },
   timer: null,
 };
+
+function thinkHtml(story) {
+  if (!story.think) return "";
+  return `<section class="think no-print">
+    <p class="kicker">想一想</p>
+    <h2>你會怎樣做？</h2>
+    <p class="muted">點一點圖示來選擇。可以改選，再說出原因。</p>
+    ${story.think
+      .map((item, i) => {
+        const picked = state.picks[story.id + ":" + item.id];
+        const chosen = item.options.find((opt) => opt.id === picked);
+        return `<div class="think-q" data-think="${item.id}">
+          <p class="think-ask"><b class="kicker">${i + 1}.</b> ${escapeHtml(item.q)}</p>
+          <div class="choice-grid${item.options.length > 2 ? " cols-3" : ""}">
+            ${item.options
+              .map((opt) => {
+                const on = picked === opt.id;
+                const cls = on ? (opt.good ? "on-good" : "on-think") : "";
+                return `<button type="button" class="choice ${cls}" data-pick="${item.id}:${opt.id}" aria-pressed="${on ? "true" : "false"}">
+                  <span class="ico" aria-hidden="true">${opt.icon}</span>
+                  <span>${escapeHtml(opt.label)}</span>
+                </button>`;
+              })
+              .join("")}
+          </div>
+          <p class="say" data-say ${chosen ? "" : "hidden"}>${chosen ? escapeHtml((chosen.good ? "這樣做很好。" : "再想一想。") + chosen.say) : ""}</p>
+        </div>`;
+      })
+      .join("")}
+  </section>`;
+}
 
 function storyPage(id) {
   const story = storyById(id);
@@ -226,6 +258,7 @@ function storyPage(id) {
       <button class="btn btn-sm btn-ghost" data-act="hints">${state.hints ? "隱藏提示" : "顯示觀察提示"}</button>
     </div>
     ${comic(story, state.revealed, state.hints, false)}
+    ${thinkHtml(story)}
     <section class="panel no-print">
       <div class="tabs">${tabs.map(([id, label]) => `<button data-tab="${id}" class="${state.tab === id ? "on" : ""}">${label}</button>`).join("")}</div>
       ${body}
@@ -318,6 +351,32 @@ function bindStory(story) {
     });
   });
   bindZoom(story);
+  bindThink(story);
+}
+
+function bindThink(story) {
+  if (!story.think) return;
+  document.querySelectorAll("[data-pick]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const raw = btn.getAttribute("data-pick");
+      const [qid, oid] = raw.split(":");
+      state.picks[story.id + ":" + qid] = oid;
+      const item = story.think.find((t) => t.id === qid);
+      const opt = item.options.find((o) => o.id === oid);
+      const block = btn.closest("[data-think]");
+      block.querySelectorAll("[data-pick]").forEach((b) => {
+        const selected = b.getAttribute("data-pick") === raw;
+        const id = b.getAttribute("data-pick").split(":")[1];
+        const option = item.options.find((x) => x.id === id);
+        b.classList.remove("on-good", "on-think");
+        b.setAttribute("aria-pressed", selected ? "true" : "false");
+        if (selected) b.classList.add(option.good ? "on-good" : "on-think");
+      });
+      const say = block.querySelector("[data-say]");
+      say.hidden = false;
+      say.textContent = (opt.good ? "這樣做很好。" : "再想一想。") + opt.say;
+    });
+  });
 }
 
 function bindZoom(story) {
