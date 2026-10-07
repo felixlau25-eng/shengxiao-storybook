@@ -90,7 +90,7 @@ window.STORIES = [
       {
         caption: "操場上，有同學跑步時跌倒了。",
         hint: "發生了什麼事？誰受傷？",
-        image: "comics/fall/1.jpg?v=2",
+        image: "comics/fall/1.jpg?v=3",
       },
       {
         caption: "其他人繼續跑，樂樂停下來走過去。",
@@ -105,7 +105,7 @@ window.STORIES = [
       {
         caption: "護士幫同學搽藥，同學多謝樂樂。",
         hint: "後來誰來幫忙？結果怎樣？",
-        image: "comics/fall/4.jpg?v=2",
+        image: "comics/fall/4.jpg?v=3",
       },
     ],
     starters: [
