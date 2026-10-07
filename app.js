@@ -354,6 +354,29 @@ function bindStory(story) {
   bindThink(story);
 }
 
+function playCorrect() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return;
+  if (!playCorrect.ctx) playCorrect.ctx = new Ctx();
+  const ctx = playCorrect.ctx;
+  if (ctx.state === "suspended") ctx.resume();
+  const now = ctx.currentTime;
+  [523.25, 659.25, 783.99].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    const start = now + i * 0.08;
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.2, start + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(start);
+    osc.stop(start + 0.34);
+  });
+}
+
 function bindThink(story) {
   if (!story.think) return;
   document.querySelectorAll("[data-pick]").forEach((btn) => {
@@ -375,6 +398,7 @@ function bindThink(story) {
       const say = block.querySelector("[data-say]");
       say.hidden = false;
       say.textContent = (opt.good ? "這樣做很好。" : "再想一想。") + opt.say;
+      if (opt.good) playCorrect();
     });
   });
 }
