@@ -322,7 +322,7 @@ window.STORIES = [
       {
         caption: "安安看見同學難過，看了看自己的食物。",
         hint: "安安發現了什麼？她的心情怎樣？",
-        image: "comics/lunch/2.jpg?v=3",
+        image: "comics/lunch/2.jpg?v=4",
       },
       {
         caption: "安安把三文治分開，分給同學。",
@@ -332,7 +332,7 @@ window.STORIES = [
       {
         caption: "兩人一起吃飯，都笑了。",
         hint: "結果怎樣？分享之後有什麼感覺？",
-        image: "comics/lunch/4.jpg?v=3",
+        image: "comics/lunch/4.jpg?v=4",
       },
     ],
     starters: [
