@@ -361,7 +361,22 @@ function playCorrect() {
   const ctx = playCorrect.ctx;
   if (ctx.state === "suspended") ctx.resume();
   const now = ctx.currentTime;
-  [0, 0.16, 0.32].forEach((offset) => clapAt(ctx, now + offset));
+  [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => dingAt(ctx, now + i * 0.11, freq));
+  [0.32, 0.48, 0.64].forEach((offset) => clapAt(ctx, now + offset));
+}
+
+function dingAt(ctx, time, freq) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "triangle";
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.0001, time);
+  gain.gain.exponentialRampToValueAtTime(0.18, time + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(time);
+  osc.stop(time + 0.4);
 }
 
 function clapAt(ctx, time) {
