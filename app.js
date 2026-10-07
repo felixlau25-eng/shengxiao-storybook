@@ -356,7 +356,7 @@ function bindStory(story) {
 
 function playCorrect() {
   if (!playCorrect.audio) {
-    playCorrect.audio = new Audio("sounds/cheer.mp3");
+    playCorrect.audio = new Audio("sounds/happy.mp3");
     playCorrect.audio.preload = "auto";
   }
   const audio = playCorrect.audio;
