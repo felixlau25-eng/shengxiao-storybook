@@ -1,13 +1,13 @@
 :root {
-  --bg: #f3ede1;
-  --surface: #fffbf4;
-  --surface-2: #ebe4d4;
+  --bg: #fff4b8;
+  --surface: #ffffff;
+  --surface-2: #ffe3b0;
   --fg: #1c1814;
-  --muted: #6b6258;
-  --subtle: #8a8176;
-  --primary: #1f5c4b;
-  --primary-hover: #174738;
-  --primary-fg: #f3ede1;
+  --muted: #5c534b;
+  --subtle: #7a7168;
+  --primary: #0e9a78;
+  --primary-hover: #087a5f;
+  --primary-fg: #ffffff;
   --shadow: 0 0 0 1px rgba(28, 24, 20, 0.08), 0 1px 2px -1px rgba(28, 24, 20, 0.06),
     0 2px 8px 0 rgba(28, 24, 20, 0.04);
   --font-sans: "LXGW WenKai TC", "Noto Sans TC", "PingFang HK", system-ui, sans-serif;
@@ -15,10 +15,21 @@
 }
 
 * { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; font-size: 20px; }
+html {
+  -webkit-font-smoothing: antialiased;
+  font-size: 20px;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 0% 0%, #ffe14a 0, transparent 32%),
+    radial-gradient(circle at 100% 0%, #ff7eaa 0, transparent 30%),
+    radial-gradient(circle at 100% 100%, #5ee0a0 0, transparent 34%),
+    radial-gradient(circle at 0% 100%, #49b7ff 0, transparent 36%),
+    linear-gradient(160deg, #62c6ff 0%, #b7ecff 34%, #fff1a3 66%, #ffc4dc 100%);
+  background-attachment: fixed;
+}
 body {
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 1.15rem;
@@ -43,7 +54,7 @@ header.site {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in oklab, var(--bg) 90%, white);
+  background: color-mix(in oklab, white 82%, transparent);
   border-bottom: 1px solid rgba(28, 24, 20, 0.1);
   backdrop-filter: blur(8px);
 }
