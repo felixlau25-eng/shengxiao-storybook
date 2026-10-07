@@ -355,51 +355,15 @@ function bindStory(story) {
 }
 
 function playCorrect() {
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if (!Ctx) return;
-  if (!playCorrect.ctx) playCorrect.ctx = new Ctx();
-  const ctx = playCorrect.ctx;
-  if (ctx.state === "suspended") ctx.resume();
-  const now = ctx.currentTime;
-  [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => dingAt(ctx, now + i * 0.11, freq));
-  [0.32, 0.48, 0.64].forEach((offset) => clapAt(ctx, now + offset));
-}
-
-function dingAt(ctx, time, freq) {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "triangle";
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(0.18, time + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(time);
-  osc.stop(time + 0.4);
-}
-
-function clapAt(ctx, time) {
-  const duration = 0.12;
-  const length = Math.floor(ctx.sampleRate * duration);
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-  const filter = ctx.createBiquadFilter();
-  filter.type = "bandpass";
-  filter.frequency.value = 1600;
-  filter.Q.value = 0.8;
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(0.55, time + 0.004);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-  noise.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-  noise.start(time);
-  noise.stop(time + duration);
+  if (!playCorrect.audio) {
+    playCorrect.audio = new Audio("sounds/cheer.mp3");
+    playCorrect.audio.preload = "auto";
+  }
+  const audio = playCorrect.audio;
+  audio.volume = 0.9;
+  audio.currentTime = 0;
+  const pending = audio.play();
+  if (pending) pending.catch(() => {});
 }
 
 function bindThink(story) {
