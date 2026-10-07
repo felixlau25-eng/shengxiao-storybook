@@ -105,7 +105,7 @@ window.STORIES = [
       {
         caption: "護士幫同學搽藥，同學多謝樂樂。",
         hint: "後來誰來幫忙？結果怎樣？",
-        image: "comics/fall/4.jpg?v=3",
+        image: "comics/fall/4.jpg?v=4",
       },
     ],
     starters: [
