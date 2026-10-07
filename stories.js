@@ -327,7 +327,7 @@ window.STORIES = [
       {
         caption: "安安把三文治分開，分給同學。",
         hint: "她怎樣幫助同學？",
-        image: "comics/lunch/3.jpg?v=3",
+        image: "comics/lunch/3.jpg?v=4",
       },
       {
         caption: "兩人一起吃飯，都笑了。",
