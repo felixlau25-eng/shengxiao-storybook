@@ -49,8 +49,8 @@ function comic(story, revealed, hints, compact) {
         <span class="stamp">${LABELS[i]}</span>
         ${
           vis
-            ? `<img class="panel-img" src="${p.image}" alt="第${LABELS[i]}格：${escapeHtml(p.caption)}">`
-            : `<div class="hidden-panel">？</div>`
+            ? `<img class="panel-img pop-in" src="${p.image}" alt="第${LABELS[i]}格：${escapeHtml(p.caption)}">`
+            : `<div class="hidden-panel"><span class="pulse-q">？</span></div>`
         }
         ${vis && hints ? `<span class="hint">${escapeHtml(p.hint)}</span>` : ""}
       </button>`;
@@ -73,11 +73,11 @@ function home() {
         </div>
       </div>
       <div class="chars">
-        <figure>
+        <figure class="floaty">
           <img class="panel-img" src="comics/chars/lele.jpg" alt="樂樂">
           <figcaption>樂樂</figcaption>
         </figure>
-        <figure>
+        <figure class="floaty" style="animation-delay:.6s">
           <img class="panel-img" src="comics/chars/anan.jpg" alt="安安">
           <figcaption>安安</figcaption>
         </figure>
@@ -92,8 +92,8 @@ function home() {
         ["4", "答提問", "對不對？如果是你，你會怎樣？"],
       ]
         .map(
-          ([n, t, d]) =>
-            `<li class="step"><span class="kicker">第 ${n} 步</span><b>${t}</b><span class="muted">${d}</span></li>`,
+          ([n, t, d], i) =>
+            `<li class="step rise" style="animation-delay:${i * 80}ms"><span class="kicker">第 ${n} 步</span><b>${t}</b><span class="muted">${d}</span></li>`,
         )
         .join("")}
     </ol>
@@ -102,9 +102,9 @@ function home() {
       <p class="muted">已練習 ${done.length} / ${window.STORIES.length}</p>
     </div>
     <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
-      ${window.STORIES.map((s) => {
+      ${window.STORIES.map((s, i) => {
         const ok = done.includes(s.id);
-        return `<li><a class="card" href="#/story/${s.id}">
+        return `<li class="rise" style="animation-delay:${i * 70}ms"><a class="card card-lift" href="#/story/${s.id}">
           <div class="thumbs">${s.panels.map((p) => `<img class="panel-img" src="${p.image}" alt="">`).join("")}</div>
           <div class="card-body">
             <p class="meta">${s.value} · ${s.level} · ${s.setting}${ok ? " · 已練習" : ""}</p>
@@ -194,13 +194,14 @@ function thinkHtml(story) {
                 const on = picked === opt.id;
                 const cls = on ? (opt.good ? "on-good" : "on-think") : "";
                 return `<button type="button" class="choice ${cls}" data-pick="${item.id}:${opt.id}" aria-pressed="${on ? "true" : "false"}">
+                  ${on && opt.good ? `<span class="cheer-stars" aria-hidden="true"><span>★</span><span>✦</span><span>★</span></span>` : ""}
                   <span class="ico" aria-hidden="true">${opt.icon}</span>
                   <span>${escapeHtml(opt.label)}</span>
                 </button>`;
               })
               .join("")}
           </div>
-          <p class="say" data-say ${chosen ? "" : "hidden"}>${chosen ? escapeHtml((chosen.good ? "這樣做很好。" : "再想一想。") + chosen.say) : ""}</p>
+          <p class="say rise" data-say ${chosen ? "" : "hidden"}>${chosen ? escapeHtml((chosen.good ? "這樣做很好。" : "再想一想。") + chosen.say) : ""}</p>
         </div>`;
       })
       .join("")}
@@ -300,7 +301,7 @@ function interviewPage() {
       <p style="font-family:var(--font-display);font-size:1.35rem">${escapeHtml(item.q)}</p>
       <button class="btn btn-primary" data-iv="nextq">${iv.q + 1 >= story.questions.length ? "提問結束，去評分" : "下一題"}</button>`;
   } else {
-    box = `<h3>老師／家長評分</h3>
+    box = `<p class="kicker pop-in" style="font-size:1.6rem">說完了，做得好！</p><h3>老師／家長評分</h3>
       ${story.scoring
         .map(
           (s, i) =>
