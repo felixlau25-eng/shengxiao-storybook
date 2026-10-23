@@ -181,6 +181,7 @@ const state = {
     school: "",
     family: ["爸爸", "媽媽"],
     hobbies: [],
+    job: "",
     step: 0,
     picks: {},
   },
@@ -493,6 +494,14 @@ const INTRO_HOBBIES = [
   ["砌積木", "comics/intro/blocks.jpg"],
   ["游泳", "comics/intro/swim.jpg"],
 ];
+const INTRO_JOBS = [
+  ["警察", "comics/intro/job-police.jpg"],
+  ["老師", "comics/intro/job-teacher.jpg"],
+  ["消防員", "comics/intro/job-fire.jpg"],
+  ["運動員", "comics/intro/job-sport.jpg"],
+  ["太空人", "comics/intro/job-space.jpg"],
+  ["醫生", "comics/intro/job-doctor.jpg"],
+];
 const INTRO_CHECKS = [
   ["hi", "見到老師，你會先說什麼？", [["👋", "老師好", true, "要先打招呼，再介紹自己。"], ["🙅", "喂", false, "「喂」不夠禮貌。請說「老師好」。"], ["😶", "不說話", false, "見到老師要開口打招呼。"]]],
   ["eye", "說話的時候，眼睛看哪裏？", [["👀", "看着老師", true, "看着老師，聲音要清楚。"], ["👇", "看着地下", false, "可以勇敢望一望老師。"], ["🪟", "看着窗外", false, "要專心，眼睛看着老師。"]]],
@@ -511,14 +520,17 @@ function introLines() {
   const kg = info.school.trim();
   const fam = info.family.length ? joinSpoken(info.family.concat("我")) : "爸爸、媽媽同我";
   const likes = info.hobbies.length ? "我鍾意" + joinSpoken(info.hobbies) + "。" : "我鍾意＿＿＿。";
+  const dream = info.job ? "我長大後想做" + info.job + "。" : "我長大後想做＿＿＿。";
   const word = { 4: "四", 5: "五", 6: "六" }[info.age] || "五";
   const ageImg = (INTRO_AGES.find((item) => item[0] === info.age) || INTRO_AGES[1])[1];
   const hobbyImg = (INTRO_HOBBIES.find((item) => item[0] === info.hobbies[0]) || INTRO_HOBBIES[0])[1];
+  const jobImg = (INTRO_JOBS.find((item) => item[0] === info.job) || INTRO_JOBS[1])[1];
   return [
     ["你可以介紹一下自己嗎？", "老師好，我叫" + who + "。", "comics/intro/hello.jpg"],
     ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + word + "歲，喺" + kg + "讀書。" : "我今年" + word + "歲。", ageImg],
     ["你屋企有邊個？", "我家有" + fam + "。", "comics/intro/family.jpg"],
     ["你有什麼興趣？", likes, hobbyImg],
+    ["你長大後想做什麼？", dream, jobImg],
     ["你上小學，想做個怎樣的學生？", "我上小學之後會聽老師話，同同學做好朋友。", "comics/intro/school.jpg"],
     ["你說完了嗎？", "我講完喇，多謝老師。", "comics/intro/thanks.jpg"],
   ];
@@ -545,7 +557,9 @@ function introPage() {
         ? `<div class="choice-grid">${INTRO_FAMILY.map(([label, src]) => `<button type="button" class="pic-pick ${info.family.includes(label) ? "on" : ""}" data-family="${label}"><img src="${src}" alt="${label}"><span>${label}</span></button>`).join("")}</div>`
         : info.step === 3
           ? `<div class="choice-grid cols-3">${INTRO_HOBBIES.map(([label, src]) => `<button type="button" class="pic-pick ${info.hobbies.includes(label) ? "on" : ""}" data-hobby="${label}"><img src="${src}" alt="${label}"><span>${label}</span></button>`).join("")}</div>`
-          : "";
+          : info.step === 4
+            ? `<div class="choice-grid cols-3">${INTRO_JOBS.map(([label, src]) => `<button type="button" class="pic-pick ${info.job === label ? "on" : ""}" data-job="${label}"><img src="${src}" alt="${label}"><span>${label}</span></button>`).join("")}</div>`
+            : "";
   return `<main class="wrap narrow">
     <p class="kicker">升小面試 · 開口第一題</p>
     <h1>看圖說自我介紹</h1>
@@ -613,6 +627,12 @@ function speakIntro(say) {
     "我鍾意睇書。": "sounds/intro/book.mp3",
     "我鍾意砌積木。": "sounds/intro/blocks.mp3",
     "我鍾意游泳。": "sounds/intro/swim.mp3",
+    "我長大後想做警察。": "sounds/intro/job-police.mp3",
+    "我長大後想做老師。": "sounds/intro/job-teacher.mp3",
+    "我長大後想做消防員。": "sounds/intro/job-fire.mp3",
+    "我長大後想做運動員。": "sounds/intro/job-sport.mp3",
+    "我長大後想做太空人。": "sounds/intro/job-space.mp3",
+    "我長大後想做醫生。": "sounds/intro/job-doctor.mp3",
   };
   const text = String(say).replace(/＿+/g, "").replace(/\s/g, "");
   if (window.speechSynthesis) window.speechSynthesis.cancel();
@@ -671,6 +691,13 @@ function bindIntro() {
       state.intro.hobbies = list.includes(hobby)
         ? list.filter((item) => item !== hobby)
         : list.length >= 2 ? list.slice(1).concat(hobby) : list.concat(hobby);
+      rerenderIntro(focusId);
+    });
+  });
+  document.querySelectorAll("[data-job]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = btn.getAttribute("data-job");
+      state.intro.job = state.intro.job === next ? "" : next;
       rerenderIntro(focusId);
     });
   });

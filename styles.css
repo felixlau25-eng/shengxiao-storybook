@@ -250,7 +250,7 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 }
 .choice .ico { font-size: 2.8rem; line-height: 1; }
 .choice.on-good { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); animation: good-pop 0.38s cubic-bezier(0.23, 1, 0.32, 1); }
-.film { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem; margin-top: 1rem; }
+.film { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; margin-top: 1rem; }
 .pic-pick {
   overflow: hidden;
   padding: 0;
