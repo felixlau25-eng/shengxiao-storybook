@@ -468,14 +468,28 @@ function bindInterview() {
   if (state.interview.story) bindZoom(state.interview.story);
 }
 
-const INTRO_FAMILY = ["爸爸", "媽媽", "哥哥", "姐姐", "弟弟", "妹妹", "爺爺", "嫲嫲"];
+const INTRO_AGES = [
+  [4, "comics/intro/age4.jpg"],
+  [5, "comics/intro/age5.jpg"],
+  [6, "comics/intro/age6.jpg"],
+];
+const INTRO_FAMILY = [
+  ["爸爸", "comics/intro/dad.jpg"],
+  ["媽媽", "comics/intro/mom.jpg"],
+  ["哥哥", "comics/intro/brother.jpg"],
+  ["姐姐", "comics/intro/sister.jpg"],
+  ["弟弟", "comics/intro/little-brother.jpg"],
+  ["妹妹", "comics/intro/little-sister.jpg"],
+  ["爺爺", "comics/intro/grandpa.jpg"],
+  ["嫲嫲", "comics/intro/grandma.jpg"],
+];
 const INTRO_HOBBIES = [
-  ["🎨", "畫畫"],
-  ["⚽", "踢球"],
-  ["🎵", "唱歌"],
-  ["📚", "睇書"],
-  ["🧩", "砌積木"],
-  ["🏊", "游泳"],
+  ["畫畫", "comics/intro/draw.jpg"],
+  ["踢球", "comics/intro/ball.jpg"],
+  ["唱歌", "comics/intro/sing.jpg"],
+  ["睇書", "comics/intro/book.jpg"],
+  ["砌積木", "comics/intro/blocks.jpg"],
+  ["游泳", "comics/intro/swim.jpg"],
 ];
 const INTRO_CHECKS = [
   ["hi", "見到老師，你會先說什麼？", [["👋", "老師好", true, "要先打招呼，再介紹自己。"], ["🙅", "喂", false, "「喂」不夠禮貌。請說「老師好」。"], ["😶", "不說話", false, "見到老師要開口打招呼。"]]],
@@ -495,13 +509,15 @@ function introLines() {
   const kg = info.school.trim();
   const fam = info.family.length ? joinSpoken(info.family.concat("我")) : "爸爸、媽媽同我";
   const likes = info.hobbies.length ? "我鍾意" + joinSpoken(info.hobbies) + "。" : "我鍾意＿＿＿。";
+  const ageImg = (INTRO_AGES.find((item) => item[0] === info.age) || INTRO_AGES[1])[1];
+  const hobbyImg = (INTRO_HOBBIES.find((item) => item[0] === info.hobbies[0]) || INTRO_HOBBIES[0])[1];
   return [
-    ["你可以介紹一下自己嗎？", "老師好，我叫" + who + "。"],
-    ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + info.age + "歲，喺" + kg + "讀書。" : "我今年" + info.age + "歲。"],
-    ["你屋企有邊個？", "我家有" + fam + "。"],
-    ["你有什麼興趣？", likes],
-    ["你上小學，想做個怎樣的學生？", "我上小學之後會聽老師話，同同學做好朋友。"],
-    ["你說完了嗎？", "我講完喇，多謝老師。"],
+    ["你可以介紹一下自己嗎？", "老師好，我叫" + who + "。", "comics/intro/hello.jpg"],
+    ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + info.age + "歲，喺" + kg + "讀書。" : "我今年" + info.age + "歲。", ageImg],
+    ["你屋企有邊個？", "我家有" + fam + "。", "comics/intro/family.jpg"],
+    ["你有什麼興趣？", likes, hobbyImg],
+    ["你上小學，想做個怎樣的學生？", "我上小學之後會聽老師話，同同學做好朋友。", "comics/intro/school.jpg"],
+    ["你說完了嗎？", "我講完喇，多謝老師。", "comics/intro/thanks.jpg"],
   ];
 }
 
@@ -509,43 +525,41 @@ function introPage() {
   const info = state.intro;
   const lines = introLines();
   const current = lines[info.step];
+  const familyPics = INTRO_FAMILY.filter((item) => info.family.includes(item[0]));
+  const hobbyPics = INTRO_HOBBIES.filter((item) => info.hobbies.includes(item[0]));
+  const hero = info.step === 2 && familyPics.length
+    ? `<div class="choice-grid">${familyPics.map((pic) => `<img src="${pic[1]}" alt="${pic[0]}">`).join("")}</div>`
+    : info.step === 3 && hobbyPics.length
+      ? `<div class="choice-grid">${hobbyPics.map((pic) => `<img class="pop-in" src="${pic[1]}" alt="${pic[0]}">`).join("")}</div>`
+      : `<img class="pop-in panel-img" src="${current[2]}" alt="">`;
+  const picker = info.step === 0
+    ? `<input id="intro-name" class="intro-field" value="${escapeHtml(info.name)}" placeholder="我叫……" autocomplete="off">`
+    : info.step === 1
+      ? `<div class="choice-grid cols-3">${INTRO_AGES.map(([n, src]) => `<button type="button" class="pic-pick ${info.age === n ? "on" : ""}" data-age="${n}"><img src="${src}" alt="${n}歲"><span>${n} 歲</span></button>`).join("")}</div>
+         <img class="panel-img" src="comics/intro/school.jpg" alt="" style="margin-top:.75rem;border-radius:16px">
+         <input id="intro-school" class="intro-field" value="${escapeHtml(info.school)}" placeholder="我讀的幼稚園" autocomplete="off">`
+      : info.step === 2
+        ? `<div class="choice-grid">${INTRO_FAMILY.map(([label, src]) => `<button type="button" class="pic-pick ${info.family.includes(label) ? "on" : ""}" data-family="${label}"><img src="${src}" alt="${label}"><span>${label}</span></button>`).join("")}</div>`
+        : info.step === 3
+          ? `<div class="choice-grid cols-3">${INTRO_HOBBIES.map(([label, src]) => `<button type="button" class="pic-pick ${info.hobbies.includes(label) ? "on" : ""}" data-hobby="${label}"><img src="${src}" alt="${label}"><span>${label}</span></button>`).join("")}</div>`
+          : "";
   return `<main class="wrap narrow">
     <p class="kicker">升小面試 · 開口第一題</p>
-    <h1>練習自我介紹</h1>
-    <p class="muted">先填自己的資料，再一句一句大聲說。用廣東話就好，不用背長文。</p>
-    <section class="think">
-      <h2>我的資料</h2>
-      <label class="kicker">我叫</label>
-      <input id="intro-name" class="intro-field" value="${escapeHtml(info.name)}" placeholder="例如：陳樂樂" autocomplete="off">
-      <p class="kicker" style="margin-top:1rem">我今年</p>
-      <div class="row">
-        ${[4, 5, 6].map((n) => `<button type="button" class="choice ${info.age === n ? "on-good" : ""}" data-age="${n}" style="min-height:3.5rem">${n} 歲</button>`).join("")}
+    <h1>看圖說自我介紹</h1>
+    <p class="muted">看圖，再大聲說出那一句。用廣東話就好。</p>
+    <div class="film">${lines.map((line, i) => `<button type="button" class="pic-pick ${i === info.step ? "on" : ""}" data-step="${i}"><img src="${line[2]}" alt=""></button>`).join("")}</div>
+    <section class="think" style="padding:0;overflow:hidden">
+      ${hero}
+      <div style="padding:1rem 1.1rem 1.25rem">
+        <p class="kicker">跟着說 ${info.step + 1} / ${lines.length}</p>
+        <p class="muted">面試官問：${escapeHtml(current[0])}</p>
+        <p class="pop-in" style="font-family:var(--font-display);font-size:2rem;line-height:1.45">${escapeHtml(current[1])}</p>
+        ${picker}
+        <div class="row" style="margin-top:1rem">
+          <button class="btn btn-secondary" data-intro="prev" ${info.step === 0 ? "disabled" : ""}>上一張</button>
+          <button class="btn btn-primary" data-intro="${info.step < lines.length - 1 ? "next" : "restart"}">${info.step < lines.length - 1 ? "我說完了，下一張" : "再由第一張說"}</button>
+        </div>
       </div>
-      <label class="kicker">我讀的幼稚園</label>
-      <input id="intro-school" class="intro-field" value="${escapeHtml(info.school)}" placeholder="例如：樂樂幼稚園" autocomplete="off">
-      <p class="kicker" style="margin-top:1rem">屋企有</p>
-      <div class="row">
-        ${INTRO_FAMILY.map((person) => `<button type="button" class="choice ${info.family.includes(person) ? "on-good" : ""}" data-family="${person}" style="min-height:3rem">${person}</button>`).join("")}
-      </div>
-      <p class="kicker" style="margin-top:1rem">我鍾意（最多兩樣）</p>
-      <div class="choice-grid cols-3">
-        ${INTRO_HOBBIES.map(([icon, label]) => `<button type="button" class="choice ${info.hobbies.includes(label) ? "on-good" : ""}" data-hobby="${label}"><span class="ico">${icon}</span><span>${label}</span></button>`).join("")}
-      </div>
-    </section>
-    <section class="think">
-      <p class="kicker">跟着說 ${info.step + 1} / ${lines.length}</p>
-      <p class="muted">面試官問：${escapeHtml(current[0])}</p>
-      <p class="pop-in" style="font-family:var(--font-display);font-size:2rem;line-height:1.45">${escapeHtml(current[1])}</p>
-      <div class="row" style="margin-top:1rem">
-        <button class="btn btn-secondary" data-intro="prev" ${info.step === 0 ? "disabled" : ""}>上一句</button>
-        <button class="btn btn-primary" data-intro="${info.step < lines.length - 1 ? "next" : "restart"}">${info.step < lines.length - 1 ? "我說完了，下一句" : "再由第一句說"}</button>
-      </div>
-    </section>
-    <section class="think">
-      <h2>完整自我介紹</h2>
-      <ol style="padding:0;list-style:none">
-        ${lines.map((line, i) => `<li class="${i === info.step ? "choice on-good" : "say"}" style="margin-top:.5rem">${escapeHtml(line[1])}</li>`).join("")}
-      </ol>
     </section>
     <section class="think no-print">
       <p class="kicker">想一想</p>
@@ -605,6 +619,12 @@ function bindIntro() {
         ? list.filter((item) => item !== hobby)
         : list.length >= 2 ? list.slice(1).concat(hobby) : list.concat(hobby);
       rerenderIntro(focusId);
+    });
+  });
+  document.querySelectorAll("[data-step]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.intro.step = Number(btn.getAttribute("data-step"));
+      rerenderIntro();
     });
   });
   document.querySelectorAll("[data-intro]").forEach((btn) => {

@@ -250,6 +250,19 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 }
 .choice .ico { font-size: 2.8rem; line-height: 1; }
 .choice.on-good { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); animation: good-pop 0.38s cubic-bezier(0.23, 1, 0.32, 1); }
+.film { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem; margin-top: 1rem; }
+.pic-pick {
+  overflow: hidden;
+  padding: 0;
+  border: 4px solid transparent;
+  border-radius: 14px;
+  background: white;
+  text-align: center;
+}
+.pic-pick img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.film .pic-pick img { aspect-ratio: 3/2; }
+.pic-pick span { display: block; padding: 0.25rem 0.2rem 0.4rem; font-size: 1rem; }
+.pic-pick.on { border-color: var(--primary); }
 .intro-field {
   display: block;
   width: 100%;
