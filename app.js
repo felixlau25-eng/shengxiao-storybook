@@ -509,11 +509,12 @@ function introLines() {
   const kg = info.school.trim();
   const fam = info.family.length ? joinSpoken(info.family.concat("我")) : "爸爸、媽媽同我";
   const likes = info.hobbies.length ? "我鍾意" + joinSpoken(info.hobbies) + "。" : "我鍾意＿＿＿。";
+  const word = { 4: "四", 5: "五", 6: "六" }[info.age] || "五";
   const ageImg = (INTRO_AGES.find((item) => item[0] === info.age) || INTRO_AGES[1])[1];
   const hobbyImg = (INTRO_HOBBIES.find((item) => item[0] === info.hobbies[0]) || INTRO_HOBBIES[0])[1];
   return [
     ["你可以介紹一下自己嗎？", "老師好，我叫" + who + "。", "comics/intro/hello.jpg"],
-    ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + info.age + "歲，喺" + kg + "讀書。" : "我今年" + info.age + "歲。", ageImg],
+    ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + word + "歲，喺" + kg + "讀書。" : "我今年" + word + "歲。", ageImg],
     ["你屋企有邊個？", "我家有" + fam + "。", "comics/intro/family.jpg"],
     ["你有什麼興趣？", likes, hobbyImg],
     ["你上小學，想做個怎樣的學生？", "我上小學之後會聽老師話，同同學做好朋友。", "comics/intro/school.jpg"],
@@ -554,6 +555,7 @@ function introPage() {
         <p class="kicker">跟着說 ${info.step + 1} / ${lines.length}</p>
         <p class="muted">面試官問：${escapeHtml(current[0])}</p>
         <p class="pop-in" style="font-family:var(--font-display);font-size:2rem;line-height:1.45">${escapeHtml(current[1])}</p>
+        <button class="btn btn-secondary" type="button" id="hearBtn">聽一聽</button>
         ${picker}
         <div class="row" style="margin-top:1rem">
           <button class="btn btn-secondary" data-intro="prev" ${info.step === 0 ? "disabled" : ""}>上一張</button>
@@ -582,6 +584,45 @@ function introPage() {
       }).join("")}
     </section>
   </main>`;
+}
+
+function speakIntro(say) {
+  const clips = {
+    "老師好，我叫。": "sounds/intro/hello.mp3",
+    "我今年四歲。": "sounds/intro/age4.mp3",
+    "我今年五歲。": "sounds/intro/age5.mp3",
+    "我今年六歲。": "sounds/intro/age6.mp3",
+    "我上小學之後會聽老師話，同同學做好朋友。": "sounds/intro/primary.mp3",
+    "我講完喇，多謝老師。": "sounds/intro/thanks.mp3",
+    "我家有爸爸、媽媽同我。": "sounds/intro/family.mp3",
+    "我鍾意畫畫。": "sounds/intro/draw.mp3",
+    "我鍾意踢球。": "sounds/intro/ball.mp3",
+    "我鍾意唱歌。": "sounds/intro/sing.mp3",
+    "我鍾意睇書。": "sounds/intro/book.mp3",
+    "我鍾意砌積木。": "sounds/intro/blocks.mp3",
+    "我鍾意游泳。": "sounds/intro/swim.mp3",
+  };
+  const text = String(say).replace(/＿+/g, "").replace(/\s/g, "");
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (speakIntro.audio) {
+    speakIntro.audio.pause();
+    speakIntro.audio = null;
+  }
+  if (clips[text]) {
+    speakIntro.audio = new Audio(clips[text]);
+    speakIntro.audio.play().catch(() => {});
+    return;
+  }
+  if (!window.speechSynthesis) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "zh-HK";
+  utter.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const voice =
+    voices.find((item) => /zh-HK|yue|cantonese|hong kong/i.test(item.lang + " " + item.name)) ||
+    voices.find((item) => item.lang.toLowerCase().startsWith("zh"));
+  if (voice) utter.voice = voice;
+  window.speechSynthesis.speak(utter);
 }
 
 function bindIntro() {
@@ -620,6 +661,9 @@ function bindIntro() {
         : list.length >= 2 ? list.slice(1).concat(hobby) : list.concat(hobby);
       rerenderIntro(focusId);
     });
+  });
+  document.getElementById("hearBtn")?.addEventListener("click", () => {
+    speakIntro(introLines()[state.intro.step][1]);
   });
   document.querySelectorAll("[data-step]").forEach((btn) => {
     btn.addEventListener("click", () => {
