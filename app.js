@@ -563,6 +563,16 @@ function introPage() {
         </div>
       </div>
     </section>
+    <section class="think">
+      <h2>每一句都可以聽</h2>
+      <ul style="list-style:none;padding:0;margin-top:1rem">
+        ${lines.map((line) => `<li class="say" style="display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:.6rem">
+          <img src="${line[2]}" alt="" style="width:4rem;height:4rem;object-fit:cover;border-radius:10px">
+          <span style="flex:1;min-width:12rem">${escapeHtml(line[1])}</span>
+          <button type="button" class="btn btn-secondary" data-hear="${escapeHtml(line[1])}">聽一聽</button>
+        </li>`).join("")}
+      </ul>
+    </section>
     <section class="think no-print">
       <p class="kicker">想一想</p>
       <h2>有禮貌的自我介紹</h2>
@@ -661,6 +671,9 @@ function bindIntro() {
         : list.length >= 2 ? list.slice(1).concat(hobby) : list.concat(hobby);
       rerenderIntro(focusId);
     });
+  });
+  document.querySelectorAll("[data-hear]").forEach((btn) => {
+    btn.addEventListener("click", () => speakIntro(btn.getAttribute("data-hear")));
   });
   document.getElementById("hearBtn")?.addEventListener("click", () => {
     speakIntro(introLines()[state.intro.step][1]);
