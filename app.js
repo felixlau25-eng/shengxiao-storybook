@@ -482,6 +482,8 @@ const INTRO_FAMILY = [
   ["妹妹", "comics/intro/little-sister.jpg"],
   ["爺爺", "comics/intro/grandpa.jpg"],
   ["嫲嫲", "comics/intro/grandma.jpg"],
+  ["公公", "comics/intro/gonggong.jpg"],
+  ["婆婆", "comics/intro/popo.jpg"],
 ];
 const INTRO_HOBBIES = [
   ["畫畫", "comics/intro/draw.jpg"],
