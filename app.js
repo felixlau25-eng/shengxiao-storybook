@@ -36,6 +36,7 @@ function parseHash() {
   const raw = (location.hash || "#/").replace(/^#/, "") || "/";
   const parts = raw.split("/").filter(Boolean);
   if (parts[0] === "guide") return { page: "guide" };
+  if (parts[0] === "intro") return { page: "intro" };
   if (parts[0] === "interview") return { page: "interview" };
   if (parts[0] === "story" && parts[1]) return { page: "story", id: parts[1] };
   return { page: "home" };
@@ -68,6 +69,7 @@ function home() {
         <p class="muted">六則日常生活故事，對應香港升小面試最常見的看圖說故事。學生按格觀察、按順序說，老師可即時用範文和提問來帶。</p>
         <div class="row" style="margin-top:1.25rem">
           <a class="btn btn-primary" href="#/story/${window.STORIES[0].id}">開始第一則</a>
+          <a class="btn btn-secondary" href="#/intro">練習自我介紹</a>
           <a class="btn btn-secondary" href="#/interview">模擬面試</a>
           <a class="btn btn-ghost" href="#/guide">怎樣說一段好故事</a>
         </div>
@@ -173,6 +175,15 @@ const state = {
   tab: "guide",
   picks: {},
   interview: { phase: "pick", story: null, seconds: 30, q: 0, checks: [] },
+  intro: {
+    name: "",
+    age: 5,
+    school: "",
+    family: ["爸爸", "媽媽"],
+    hobbies: [],
+    step: 0,
+    picks: {},
+  },
   timer: null,
 };
 
@@ -457,6 +468,171 @@ function bindInterview() {
   if (state.interview.story) bindZoom(state.interview.story);
 }
 
+const INTRO_FAMILY = ["爸爸", "媽媽", "哥哥", "姐姐", "弟弟", "妹妹", "爺爺", "嫲嫲"];
+const INTRO_HOBBIES = [
+  ["🎨", "畫畫"],
+  ["⚽", "踢球"],
+  ["🎵", "唱歌"],
+  ["📚", "睇書"],
+  ["🧩", "砌積木"],
+  ["🏊", "游泳"],
+];
+const INTRO_CHECKS = [
+  ["hi", "見到老師，你會先說什麼？", [["👋", "老師好", true, "要先打招呼，再介紹自己。"], ["🙅", "喂", false, "「喂」不夠禮貌。請說「老師好」。"], ["😶", "不說話", false, "見到老師要開口打招呼。"]]],
+  ["eye", "說話的時候，眼睛看哪裏？", [["👀", "看着老師", true, "看着老師，聲音要清楚。"], ["👇", "看着地下", false, "可以勇敢望一望老師。"], ["🪟", "看着窗外", false, "要專心，眼睛看着老師。"]]],
+  ["bye", "說完了，你會說什麼？", [["🙏", "多謝老師", true, "說完要多謝老師。"], ["🏃", "我走了", false, "先說「我講完喇，多謝老師」。"], ["🤐", "不說", false, "結束時也要有禮貌。"]]],
+];
+
+function joinSpoken(items) {
+  if (items.length <= 1) return items[0] || "";
+  if (items.length === 2) return items[0] + "同" + items[1];
+  return items.slice(0, -1).join("、") + "同" + items[items.length - 1];
+}
+
+function introLines() {
+  const info = state.intro;
+  const who = info.name.trim() || "＿＿＿";
+  const kg = info.school.trim();
+  const fam = info.family.length ? joinSpoken(info.family.concat("我")) : "爸爸、媽媽同我";
+  const likes = info.hobbies.length ? "我鍾意" + joinSpoken(info.hobbies) + "。" : "我鍾意＿＿＿。";
+  return [
+    ["你可以介紹一下自己嗎？", "老師好，我叫" + who + "。"],
+    ["你幾歲？讀邊間幼稚園？", kg ? "我今年" + info.age + "歲，喺" + kg + "讀書。" : "我今年" + info.age + "歲。"],
+    ["你屋企有邊個？", "我家有" + fam + "。"],
+    ["你有什麼興趣？", likes],
+    ["你上小學，想做個怎樣的學生？", "我上小學之後會聽老師話，同同學做好朋友。"],
+    ["你說完了嗎？", "我講完喇，多謝老師。"],
+  ];
+}
+
+function introPage() {
+  const info = state.intro;
+  const lines = introLines();
+  const current = lines[info.step];
+  return `<main class="wrap narrow">
+    <p class="kicker">升小面試 · 開口第一題</p>
+    <h1>練習自我介紹</h1>
+    <p class="muted">先填自己的資料，再一句一句大聲說。用廣東話就好，不用背長文。</p>
+    <section class="think">
+      <h2>我的資料</h2>
+      <label class="kicker">我叫</label>
+      <input id="intro-name" class="intro-field" value="${escapeHtml(info.name)}" placeholder="例如：陳樂樂" autocomplete="off">
+      <p class="kicker" style="margin-top:1rem">我今年</p>
+      <div class="row">
+        ${[4, 5, 6].map((n) => `<button type="button" class="choice ${info.age === n ? "on-good" : ""}" data-age="${n}" style="min-height:3.5rem">${n} 歲</button>`).join("")}
+      </div>
+      <label class="kicker">我讀的幼稚園</label>
+      <input id="intro-school" class="intro-field" value="${escapeHtml(info.school)}" placeholder="例如：樂樂幼稚園" autocomplete="off">
+      <p class="kicker" style="margin-top:1rem">屋企有</p>
+      <div class="row">
+        ${INTRO_FAMILY.map((person) => `<button type="button" class="choice ${info.family.includes(person) ? "on-good" : ""}" data-family="${person}" style="min-height:3rem">${person}</button>`).join("")}
+      </div>
+      <p class="kicker" style="margin-top:1rem">我鍾意（最多兩樣）</p>
+      <div class="choice-grid cols-3">
+        ${INTRO_HOBBIES.map(([icon, label]) => `<button type="button" class="choice ${info.hobbies.includes(label) ? "on-good" : ""}" data-hobby="${label}"><span class="ico">${icon}</span><span>${label}</span></button>`).join("")}
+      </div>
+    </section>
+    <section class="think">
+      <p class="kicker">跟着說 ${info.step + 1} / ${lines.length}</p>
+      <p class="muted">面試官問：${escapeHtml(current[0])}</p>
+      <p class="pop-in" style="font-family:var(--font-display);font-size:2rem;line-height:1.45">${escapeHtml(current[1])}</p>
+      <div class="row" style="margin-top:1rem">
+        <button class="btn btn-secondary" data-intro="prev" ${info.step === 0 ? "disabled" : ""}>上一句</button>
+        <button class="btn btn-primary" data-intro="${info.step < lines.length - 1 ? "next" : "restart"}">${info.step < lines.length - 1 ? "我說完了，下一句" : "再由第一句說"}</button>
+      </div>
+    </section>
+    <section class="think">
+      <h2>完整自我介紹</h2>
+      <ol style="padding:0;list-style:none">
+        ${lines.map((line, i) => `<li class="${i === info.step ? "choice on-good" : "say"}" style="margin-top:.5rem">${escapeHtml(line[1])}</li>`).join("")}
+      </ol>
+    </section>
+    <section class="think no-print">
+      <p class="kicker">想一想</p>
+      <h2>有禮貌的自我介紹</h2>
+      ${INTRO_CHECKS.map((item, index) => {
+        const chosen = item[2].find((opt) => opt[1] === info.picks[item[0]]);
+        return `<div class="think-q">
+          <p class="think-ask"><b class="kicker">${index + 1}.</b> ${item[1]}</p>
+          <div class="choice-grid cols-3">
+            ${item[2].map((opt) => {
+              const on = info.picks[item[0]] === opt[1];
+              return `<button type="button" class="choice ${on ? (opt[2] ? "on-good" : "on-think") : ""}" data-intro-pick="${item[0]}:${opt[1]}:${opt[2] ? "1" : "0"}">
+                ${on && opt[2] ? `<span class="cheer-stars" aria-hidden="true"><span>★</span><span>✦</span><span>★</span></span>` : ""}
+                <span class="ico">${opt[0]}</span><span>${opt[1]}</span>
+              </button>`;
+            }).join("")}
+          </div>
+          <p class="say rise" ${chosen ? "" : "hidden"}>${chosen ? escapeHtml((chosen[2] ? "這樣做很好。" : "再想一想。") + chosen[3]) : ""}</p>
+        </div>`;
+      }).join("")}
+    </section>
+  </main>`;
+}
+
+function bindIntro() {
+  const focusId = document.activeElement && document.activeElement.id;
+  const keep = (id, value) => {
+    state.intro[id === "intro-name" ? "name" : "school"] = value;
+    const say = document.querySelector(".pop-in");
+    if (say) say.textContent = introLines()[state.intro.step][1];
+  };
+  const name = document.getElementById("intro-name");
+  const school = document.getElementById("intro-school");
+  name?.addEventListener("input", () => keep("intro-name", name.value));
+  school?.addEventListener("input", () => keep("intro-school", school.value));
+  document.querySelectorAll("[data-age]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.intro.age = Number(btn.getAttribute("data-age"));
+      rerenderIntro(focusId);
+    });
+  });
+  document.querySelectorAll("[data-family]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const person = btn.getAttribute("data-family");
+      const list = state.intro.family;
+      state.intro.family = list.includes(person)
+        ? list.filter((item) => item !== person)
+        : list.length >= 4 ? list.slice(1).concat(person) : list.concat(person);
+      rerenderIntro(focusId);
+    });
+  });
+  document.querySelectorAll("[data-hobby]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const hobby = btn.getAttribute("data-hobby");
+      const list = state.intro.hobbies;
+      state.intro.hobbies = list.includes(hobby)
+        ? list.filter((item) => item !== hobby)
+        : list.length >= 2 ? list.slice(1).concat(hobby) : list.concat(hobby);
+      rerenderIntro(focusId);
+    });
+  });
+  document.querySelectorAll("[data-intro]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const act = btn.getAttribute("data-intro");
+      if (act === "prev") state.intro.step = Math.max(0, state.intro.step - 1);
+      else if (act === "next") state.intro.step += 1;
+      else state.intro.step = 0;
+      rerenderIntro();
+    });
+  });
+  document.querySelectorAll("[data-intro-pick]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const [id, label, good] = btn.getAttribute("data-intro-pick").split(":");
+      if (good === "1") playCorrect();
+      state.intro.picks[id] = label;
+      rerenderIntro();
+    });
+  });
+}
+
+function rerenderIntro(focusId) {
+  const app = document.getElementById("app");
+  app.innerHTML = introPage();
+  bindIntro();
+  if (focusId) document.getElementById(focusId)?.focus();
+}
+
 function render() {
   const route = parseHash();
   document.querySelectorAll("nav a").forEach((a) => {
@@ -464,7 +640,10 @@ function render() {
   });
   const app = document.getElementById("app");
   if (route.page === "guide") app.innerHTML = guide();
-  else if (route.page === "interview") {
+  else if (route.page === "intro") {
+    app.innerHTML = introPage();
+    bindIntro();
+  } else if (route.page === "interview") {
     app.innerHTML = interviewPage();
     bindInterview();
   } else if (route.page === "story") {

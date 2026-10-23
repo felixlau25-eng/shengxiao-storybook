@@ -250,6 +250,18 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 }
 .choice .ico { font-size: 2.8rem; line-height: 1; }
 .choice.on-good { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); animation: good-pop 0.38s cubic-bezier(0.23, 1, 0.32, 1); }
+.intro-field {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  min-height: 3.4rem;
+  border: 2px solid rgba(28, 24, 20, 0.12);
+  border-radius: 12px;
+  background: var(--bg);
+  font: inherit;
+  font-size: 1.35rem;
+  padding: 0.4rem 0.9rem;
+}
 .choice.on-think { background: #fff4d6; border-color: #c4a15a; }
 .say { margin: 0.75rem 0 0; background: var(--bg); border-radius: 12px; padding: 0.85rem 1rem; line-height: 1.7; font-size: 1.2rem; }
 
