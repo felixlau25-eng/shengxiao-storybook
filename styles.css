@@ -357,6 +357,35 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
 .cheer-stars span:nth-child(1) { --fly: translate(-22px, -40px); left: 22%; top: 42%; color: #ffe14a; }
 .cheer-stars span:nth-child(2) { --fly: translate(26px, -36px); right: 18%; top: 40%; color: #ff7eaa; }
 .cheer-stars span:nth-child(3) { --fly: translate(0, -48px); left: 46%; top: 36%; color: #49b7ff; }
+.star-sky {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.25rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 18% 22%, #fff3b0, transparent 42%),
+    radial-gradient(circle at 82% 28%, #ffd4ea, transparent 40%),
+    radial-gradient(circle at 50% 88%, #c9ecff, transparent 46%),
+    #fff8ea;
+  box-shadow: 0 0 0 2px rgba(28, 24, 20, 0.08);
+}
+.sky-star { display: inline-block; font-size: 2.25rem; line-height: 1; color: #f0b429; animation: star-land 0.7s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.star-fly { position: absolute; left: 50%; bottom: 12px; font-size: 4rem; line-height: 1; color: #ffcf3a; pointer-events: none; animation: star-rise 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+.star-fly span { position: absolute; font-size: 1.4rem; animation: twinkle 0.8s ease-out both; }
+.star-fly span:nth-child(1) { --fly: translate(-36px, -20px); color: #ff7eaa; }
+.star-fly span:nth-child(2) { --fly: translate(32px, -28px); color: #49b7ff; }
+.star-add { display: inline-flex; min-height: 4.5rem; align-items: center; gap: 0.6rem; border: 0; border-radius: 999px; background: #f0b429; padding: 0.4rem 1.4rem; font: inherit; font-size: 1.5rem; font-weight: 700; color: #3a2a00; cursor: pointer; }
+.star-add span { font-size: 2.2rem; line-height: 1; }
+@keyframes star-land {
+  0% { opacity: 0; transform: translateY(70px) scale(0.2) rotate(-24deg); }
+  60% { opacity: 1; transform: translateY(-8px) scale(1.25) rotate(8deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes star-rise {
+  0% { opacity: 0; transform: translate(-50%, 30px) scale(0.4) rotate(-12deg); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -240px) scale(1.35) rotate(16deg); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

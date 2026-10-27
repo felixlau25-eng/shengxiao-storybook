@@ -37,6 +37,7 @@ function parseHash() {
   const parts = raw.split("/").filter(Boolean);
   if (parts[0] === "guide") return { page: "guide" };
   if (parts[0] === "intro") return { page: "intro" };
+  if (parts[0] === "stars") return { page: "stars" };
   if (parts[0] === "interview") return { page: "interview" };
   if (parts[0] === "story" && parts[1]) return { page: "story", id: parts[1] };
   return { page: "home" };
@@ -72,6 +73,7 @@ function home() {
           <a class="btn btn-secondary" href="#/intro">練習自我介紹</a>
           <a class="btn btn-secondary" href="#/interview">模擬面試</a>
           <a class="btn btn-ghost" href="#/guide">怎樣說一段好故事</a>
+          <a class="btn btn-secondary" href="#/stars">鼓勵星星</a>
         </div>
       </div>
       <div class="chars">
@@ -185,6 +187,7 @@ const state = {
     step: 0,
     picks: {},
   },
+  stars: { name: "", count: 0, fly: 0, clearing: false, note: "小朋友說得好，就加一顆星。" },
   timer: null,
 };
 
@@ -739,6 +742,101 @@ function rerenderIntro(focusId) {
   if (focusId) document.getElementById(focusId)?.focus();
 }
 
+function starPraise(count) {
+  if (count <= 0) return "小朋友說得好，就加一顆星。";
+  if (count === 1) return "第一顆星，開了個好頭！";
+  if (count % 10 === 0) return count + " 顆星，真的很棒！";
+  if (count % 5 === 0) return "又集滿五顆，繼續加油！";
+  return ["你好叻呀！", "做得好！", "爸爸媽媽看到了！", "繼續努力！"][count % 4];
+}
+
+function loadStars() {
+  try {
+    const raw = JSON.parse(localStorage.getItem("storybook-stars-v1") || "{}");
+    state.stars.name = typeof raw.name === "string" ? raw.name : "";
+    state.stars.count = Math.max(0, Math.floor(Number(raw.count) || 0));
+    if (state.stars.count > 0) state.stars.note = starPraise(state.stars.count);
+  } catch {
+    /* keep defaults */
+  }
+  state.stars.ready = true;
+}
+
+function saveStars() {
+  localStorage.setItem("storybook-stars-v1", JSON.stringify({ name: state.stars.name, count: state.stars.count }));
+}
+
+function starsPage() {
+  if (!state.stars.ready) loadStars();
+  const jar = state.stars;
+  const who = jar.name.trim() || "小朋友";
+  const shown = Math.min(jar.count, 24);
+  const stars = Array.from({ length: shown }, (_, i) => {
+    const fresh = i === shown - 1;
+    return `<span class="${fresh ? "sky-star" : ""}" style="${fresh ? "" : "font-size:2.25rem;color:#f0b429"}" aria-hidden="true">★</span>`;
+  }).join("");
+  return `<main class="wrap narrow">
+    <p class="kicker">給家長</p>
+    <h1>鼓勵星星</h1>
+    <p class="muted">小朋友說得好，就按一下。每加一顆星，都會飛起來。</p>
+    <label class="kicker">小朋友的名字</label>
+    <input id="star-name" class="intro-field" value="${escapeHtml(jar.name)}" placeholder="例如：樂樂" autocomplete="off">
+    <section class="star-sky">
+      <p class="rise" style="text-align:center;font-family:var(--font-display);font-size:1.6rem;padding:1rem 1rem 0">${escapeHtml(who)}，${escapeHtml(jar.note)}</p>
+      <p class="good-pop" style="text-align:center;font-family:var(--font-display);font-size:3.5rem;margin:0">${jar.count}<span style="font-size:1.3rem"> 顆星</span></p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;padding:1rem 1rem 1.4rem">${stars}</div>
+      ${jar.count > 24 ? `<p class="muted" style="text-align:center;padding-bottom:1rem">還有 ${jar.count - 24} 顆在星星罐裏。</p>` : ""}
+      ${jar.fly ? `<span class="star-fly" aria-hidden="true">★<span>✦</span><span>★</span></span>` : ""}
+    </section>
+    <div class="row" style="margin-top:1.25rem">
+      <button type="button" class="star-add" id="star-add"><span aria-hidden="true">★</span>加一顆星</button>
+      <button type="button" class="btn btn-secondary" id="star-undo" ${jar.count === 0 ? "disabled" : ""}>收回一顆</button>
+      ${jar.clearing
+        ? `<button type="button" class="btn btn-ghost" id="star-clear-yes">確定清空</button>`
+        : `<button type="button" class="btn btn-ghost" id="star-clear" ${jar.count === 0 ? "disabled" : ""}>清空</button>`}
+    </div>
+  </main>`;
+}
+
+function bindStars() {
+  const name = document.getElementById("star-name");
+  name?.addEventListener("input", () => {
+    state.stars.name = name.value;
+    saveStars();
+    const who = name.value.trim() || "小朋友";
+    const line = document.querySelector(".star-sky .rise");
+    if (line) line.textContent = who + "，" + state.stars.note;
+  });
+  document.getElementById("star-add")?.addEventListener("click", () => {
+    state.stars.count += 1;
+    state.stars.fly += 1;
+    state.stars.note = starPraise(state.stars.count);
+    state.stars.clearing = false;
+    saveStars();
+    render();
+  });
+  document.getElementById("star-undo")?.addEventListener("click", () => {
+    state.stars.count = Math.max(0, state.stars.count - 1);
+    state.stars.fly = 0;
+    state.stars.note = "收回了一顆星。";
+    saveStars();
+    render();
+  });
+  document.getElementById("star-clear")?.addEventListener("click", () => {
+    state.stars.clearing = true;
+    state.stars.fly = 0;
+    render();
+  });
+  document.getElementById("star-clear-yes")?.addEventListener("click", () => {
+    state.stars.count = 0;
+    state.stars.fly = 0;
+    state.stars.clearing = false;
+    state.stars.note = "星星清空了，可以重新開始。";
+    saveStars();
+    render();
+  });
+}
+
 function render() {
   const route = parseHash();
   document.querySelectorAll("nav a").forEach((a) => {
@@ -749,6 +847,9 @@ function render() {
   else if (route.page === "intro") {
     app.innerHTML = introPage();
     bindIntro();
+  } else if (route.page === "stars") {
+    app.innerHTML = starsPage();
+    bindStars();
   } else if (route.page === "interview") {
     app.innerHTML = interviewPage();
     bindInterview();
