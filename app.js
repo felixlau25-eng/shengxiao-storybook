@@ -60,6 +60,22 @@ function comic(story, revealed, hints, compact) {
     .join("")}</div>`;
 }
 
+function storyCards(list, done) {
+  return list
+    .map((s, i) => {
+      const ok = done.includes(s.id);
+      return `<li class="rise" style="animation-delay:${i * 70}ms"><a class="card card-lift" href="#/story/${s.id}">
+          <div class="thumbs">${s.panels.map((p) => `<img class="panel-img" src="${p.image}" alt="">`).join("")}</div>
+          <div class="card-body">
+            <p class="meta">${s.value} · ${s.level} · ${s.setting}${ok ? " · 已練習" : ""}</p>
+            <h3>${s.title}</h3>
+            <p class="muted">${s.summary}</p>
+          </div>
+        </a></li>`;
+    })
+    .join("");
+}
+
 function home() {
   const done = practiced();
   return `<main class="wrap">
@@ -67,7 +83,7 @@ function home() {
       <div>
         <p class="kicker">K3 升小面試練習</p>
         <h1>看圖說故事<span>四格漫畫練習簿</span></h1>
-        <p class="muted">六則日常生活故事，對應香港升小面試最常見的看圖說故事。學生按格觀察、按順序說，老師可即時用範文和提問來帶。</p>
+        <p class="muted">日常生活和經典童話，都用四格圖練習看圖說故事。學生按格觀察、按順序說，老師可即時用範文和提問來帶。</p>
         <div class="row" style="margin-top:1.25rem">
           <a class="btn btn-primary" href="#/story/${window.STORIES[0].id}">開始第一則</a>
           <a class="btn btn-secondary" href="#/intro">練習自我介紹</a>
@@ -102,21 +118,16 @@ function home() {
         .join("")}
     </ol>
     <div class="row" style="margin-top:3rem;align-items:end;justify-content:space-between">
-      <h2 style="margin:0">六則四格故事</h2>
+      <h2 style="margin:0">生活故事</h2>
       <p class="muted">已練習 ${done.length} / ${window.STORIES.length}</p>
     </div>
     <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
-      ${window.STORIES.map((s, i) => {
-        const ok = done.includes(s.id);
-        return `<li class="rise" style="animation-delay:${i * 70}ms"><a class="card card-lift" href="#/story/${s.id}">
-          <div class="thumbs">${s.panels.map((p) => `<img class="panel-img" src="${p.image}" alt="">`).join("")}</div>
-          <div class="card-body">
-            <p class="meta">${s.value} · ${s.level} · ${s.setting}${ok ? " · 已練習" : ""}</p>
-            <h3>${s.title}</h3>
-            <p class="muted">${s.summary}</p>
-          </div>
-        </a></li>`;
-      }).join("")}
+      ${storyCards(window.STORIES.filter((s) => s.category !== "童話"), done)}
+    </ul>
+    <h2 style="margin-top:3rem">童話故事</h2>
+    <p class="muted">六則經典童話，用四格圖說出順序和道理。</p>
+    <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
+      ${storyCards(window.STORIES.filter((s) => s.category === "童話"), done)}
     </ul>
   </main>`;
 }
