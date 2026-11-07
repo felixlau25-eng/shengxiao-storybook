@@ -83,7 +83,7 @@ function home() {
       <div>
         <p class="kicker">K3 升小面試練習</p>
         <h1>看圖說故事<span>四格漫畫練習簿</span></h1>
-        <p class="muted">日常生活和經典童話，都用四格圖練習看圖說故事。學生按格觀察、按順序說，老師可即時用範文和提問來帶。</p>
+        <p class="muted">日常生活、經典童話和中國傳統故事，都用四格圖練習看圖說故事。學生按格觀察、按順序說，老師可即時用範文和提問來帶。</p>
         <div class="row" style="margin-top:1.25rem">
           <a class="btn btn-primary" href="#/story/${window.STORIES[0].id}">開始第一則</a>
           <a class="btn btn-secondary" href="#/intro">練習自我介紹</a>
@@ -122,12 +122,17 @@ function home() {
       <p class="muted">已練習 ${done.length} / ${window.STORIES.length}</p>
     </div>
     <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
-      ${storyCards(window.STORIES.filter((s) => s.category !== "童話"), done)}
+      ${storyCards(window.STORIES.filter((s) => !s.category || s.category === "生活"), done)}
     </ul>
     <h2 style="margin-top:3rem">童話故事</h2>
     <p class="muted">六則經典童話，用四格圖說出順序和道理。</p>
     <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
       ${storyCards(window.STORIES.filter((s) => s.category === "童話"), done)}
+    </ul>
+    <h2 style="margin-top:3rem">中國傳統故事</h2>
+    <p class="muted">西遊記、哪吒和其他大家都聽過的故事，用四格圖講出來。</p>
+    <ul class="cards" style="list-style:none;padding:0;margin-top:1rem">
+      ${storyCards(window.STORIES.filter((s) => s.category === "傳統"), done)}
     </ul>
   </main>`;
 }
