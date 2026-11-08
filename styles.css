@@ -386,6 +386,34 @@ nav a:hover, nav a.active { background: var(--surface-2); color: var(--fg); }
   30% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -240px) scale(1.35) rotate(16deg); }
 }
+.gacha { position: relative; width: 220px; margin: 1.25rem auto 0; }
+.gacha-dome { position: relative; height: 150px; overflow: hidden; border: 6px solid #1d4e89; border-radius: 120px 120px 18px 18px; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.75), transparent 36%), linear-gradient(180deg, #b7e6ff, #3aa0e6); }
+.cap { position: absolute; width: 34px; height: 34px; border-radius: 999px; animation: floaty 3.2s ease-in-out infinite; }
+.cap-a { left: 28px; top: 70px; background: linear-gradient(#ffe14a 50%, #ff7eaa 50%); }
+.cap-b { left: 78px; top: 36px; background: linear-gradient(#7dffb2 50%, #49b7ff 50%); animation-delay: .4s; }
+.cap-c { right: 36px; top: 64px; background: linear-gradient(#ffd0e8 50%, #f0b429 50%); animation-delay: .8s; }
+.cap-d { left: 92px; bottom: 16px; background: linear-gradient(#fff 50%, #ff8b6a 50%); }
+.gacha-body { display: flex; height: 84px; align-items: center; justify-content: center; border: 6px solid #9d2340; border-top: 0; border-radius: 0 0 24px 24px; background: #ff5a7a; color: white; font-size: 1.35rem; font-weight: 700; }
+.gacha.is-shaking { animation: gacha-shake .18s linear 4; }
+.gacha-drop { position: absolute; left: 50%; top: 118px; width: 42px; height: 42px; margin-left: -21px; border-radius: 999px; background: linear-gradient(#ffe14a 50%, #ff7eaa 50%); animation: capsule-drop .85s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+.gacha-btn { min-height: 4.6rem; border: 0; border-radius: 18px; background: #fff4cc; padding: .6rem .8rem; font: inherit; cursor: pointer; }
+.gacha-btn b { display: block; font-size: 1.45rem; }
+.gacha-btn span { color: #7a5b00; }
+.gacha-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 1.25rem; }
+.gacha-grid .gacha-btn:nth-child(2) { background: #ffe0ef; }
+.gacha-grid .gacha-btn:nth-child(3) { background: #d9f4ff; }
+.gacha-btn:disabled { cursor: not-allowed; opacity: .45; }
+.prize-pop { animation: pop-in .45s cubic-bezier(0.23, 1, 0.32, 1) both; }
+@keyframes gacha-shake {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+@keyframes capsule-drop {
+  0% { opacity: 0; transform: translateY(-30px) rotate(0); }
+  20% { opacity: 1; }
+  100% { transform: translateY(108px) rotate(30deg); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

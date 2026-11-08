@@ -782,14 +782,75 @@ function saveStars() {
   localStorage.setItem("storybook-stars-v1", JSON.stringify({ name: state.stars.name, count: state.stars.count }));
 }
 
+const PRIZES = [
+  ["sticker", "small", "星星貼紙", "comics/prizes/sticker.jpg"],
+  ["candy", "small", "波板糖", "comics/prizes/candy.jpg"],
+  ["cookie", "small", "小餅乾", "comics/prizes/cookie.jpg"],
+  ["balloon", "small", "紅氣球", "comics/prizes/balloon.jpg"],
+  ["car", "mid", "模型車", "comics/prizes/car.jpg"],
+  ["doll", "mid", "洋娃娃", "comics/prizes/doll.jpg"],
+  ["blocks", "mid", "積木", "comics/prizes/blocks.jpg"],
+  ["bear", "mid", "毛公仔", "comics/prizes/bear.jpg"],
+  ["puppy", "big", "小狗", "comics/prizes/puppy.jpg"],
+  ["kitten", "big", "小貓", "comics/prizes/kitten.jpg"],
+  ["kitchen", "big", "玩具廚房", "comics/prizes/kitchen.jpg"],
+  ["bike", "big", "小單車", "comics/prizes/bike.jpg"],
+];
+const PRIZE_COST = { small: 1, mid: 3, big: 5 };
+const PRIZE_LABEL = { small: "小獎", mid: "中獎", big: "大獎" };
+
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+function loadGacha() {
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem("storybook-gacha-v1") || "{}"); } catch { /* empty */ }
+  const day = todayKey();
+  state.gacha = {
+    draws: raw.day === day ? Math.max(0, Number(raw.draws) || 0) : 0,
+    won: Array.isArray(raw.won) ? raw.won.filter((item) => item && item.prizeId) : [],
+    spinning: false,
+    revealId: state.gacha?.revealId || "",
+    note: state.gacha?.note || "",
+  };
+}
+
+function saveGacha() {
+  localStorage.setItem("storybook-gacha-v1", JSON.stringify({
+    day: todayKey(),
+    draws: state.gacha.draws,
+    won: state.gacha.won,
+  }));
+}
+
+function prizeRow(id) {
+  return PRIZES.find((item) => item[0] === id);
+}
+
 function starsPage() {
   if (!state.stars.ready) loadStars();
+  if (!state.gacha) loadGacha();
   const jar = state.stars;
+  const gacha = state.gacha;
   const who = jar.name.trim() || "小朋友";
   const shown = Math.min(jar.count, 24);
   const stars = Array.from({ length: shown }, (_, i) => {
     const fresh = i === shown - 1;
     return `<span class="${fresh ? "sky-star" : ""}" style="${fresh ? "" : "font-size:2.25rem;color:#f0b429"}" aria-hidden="true">★</span>`;
+  }).join("");
+  const left = Math.max(0, 3 - gacha.draws);
+  const reveal = prizeRow(gacha.revealId);
+  const buttons = ["small", "mid", "big"].map((tier) => {
+    const cost = PRIZE_COST[tier];
+    const disabled = gacha.spinning || left === 0 || jar.count < cost;
+    return `<button type="button" class="gacha-btn" data-draw="${tier}" ${disabled ? "disabled" : ""}><b>${PRIZE_LABEL[tier]}</b><span>${cost} 顆星</span></button>`;
+  }).join("");
+  const album = gacha.won.map((item) => {
+    const prize = prizeRow(item.prizeId);
+    if (!prize) return "";
+    return `<li class="card" style="overflow:hidden"><img src="${prize[3]}" alt=""><div class="card-body" style="text-align:center"><h3>${prize[2]}</h3><button type="button" class="btn btn-ghost" data-claim="${item.uid}">${item.claimed ? "已兌換" : "未兌換"}</button></div></li>`;
   }).join("");
   return `<main class="wrap narrow">
     <p class="kicker">給家長</p>
@@ -811,6 +872,19 @@ function starsPage() {
         ? `<button type="button" class="btn btn-ghost" id="star-clear-yes">確定清空</button>`
         : `<button type="button" class="btn btn-ghost" id="star-clear" ${jar.count === 0 ? "disabled" : ""}>清空</button>`}
     </div>
+    <h2 style="margin-top:2.5rem">扭蛋機</h2>
+    <p class="muted">用星星抽禮物。每天可以抽三次，抽完就休息。</p>
+    <p style="font-family:var(--font-display);font-size:1.35rem">今日還可以抽 ${left} 次</p>
+    <div class="gacha${gacha.spinning ? " is-shaking" : ""}" aria-hidden="true">
+      <div class="gacha-dome"><i class="cap cap-a"></i><i class="cap cap-b"></i><i class="cap cap-c"></i><i class="cap cap-d"></i></div>
+      <div class="gacha-body">星星扭蛋</div>
+      ${gacha.spinning ? `<i class="gacha-drop"></i>` : ""}
+    </div>
+    ${reveal ? `<div class="prize-pop card" style="max-width:16rem;margin:1rem auto 0;overflow:hidden"><img src="${reveal[3]}" alt=""><p style="text-align:center;font-family:var(--font-display);font-size:1.5rem;margin:.6rem">${reveal[2]}</p></div>` : ""}
+    ${gacha.note ? `<p style="text-align:center;font-size:1.15rem">${escapeHtml(gacha.note)}</p>` : ""}
+    <div class="gacha-grid">${buttons}</div>
+    <p class="muted">一顆星是小獎，三顆星是中獎，五顆星是大獎。這些是圖卡，家長可以在家裡兌換真正的小禮物。小狗和小貓要先和爸爸媽媽商量。</p>
+    ${album ? `<h3 style="margin-top:1.5rem">抽到的禮物</h3><ul class="cards" style="list-style:none;padding:0">${album}</ul>` : ""}
   </main>`;
 }
 
@@ -850,6 +924,53 @@ function bindStars() {
     state.stars.note = "星星清空了，可以重新開始。";
     saveStars();
     render();
+  });
+  document.querySelectorAll("[data-draw]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!state.gacha) loadGacha();
+      const tier = btn.getAttribute("data-draw");
+      const cost = PRIZE_COST[tier];
+      if (state.gacha.spinning) return;
+      if (state.gacha.draws >= 3) {
+        state.gacha.note = "今日三次已經用完，明天再來。";
+        render();
+        return;
+      }
+      if (state.stars.count < cost) {
+        state.gacha.note = "還要 " + (cost - state.stars.count) + " 顆星才可以抽" + PRIZE_LABEL[tier] + "。";
+        render();
+        return;
+      }
+      const pool = PRIZES.filter((item) => item[1] === tier);
+      const prize = pool[Math.floor(Math.random() * pool.length)];
+      state.stars.count -= cost;
+      state.stars.fly = 0;
+      state.gacha.draws += 1;
+      state.gacha.spinning = true;
+      state.gacha.revealId = "";
+      state.gacha.note = "扭蛋轉緊……";
+      saveStars();
+      saveGacha();
+      render();
+      window.setTimeout(() => {
+        state.gacha.spinning = false;
+        state.gacha.revealId = prize[0];
+        state.gacha.note = "抽到" + PRIZE_LABEL[tier] + "：" + prize[2] + "！";
+        state.gacha.won.unshift({ uid: String(Date.now()), prizeId: prize[0], claimed: false });
+        state.gacha.won = state.gacha.won.slice(0, 24);
+        saveGacha();
+        render();
+      }, 900);
+    });
+  });
+  document.querySelectorAll("[data-claim]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const uid = btn.getAttribute("data-claim");
+      const row = state.gacha.won.find((item) => item.uid === uid);
+      if (row) row.claimed = !row.claimed;
+      saveGacha();
+      render();
+    });
   });
 }
 
