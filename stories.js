@@ -10,22 +10,22 @@ window.STORIES = [
       {
         caption: "樂樂和安安在公園玩，地上有一個錢包。",
         hint: "他們在哪裏？地上有什麼？",
-        image: "comics/wallet/1.jpg",
+        image: "comics/wallet/1.jpg?v=3",
       },
       {
         caption: "樂樂打開錢包，裏面有證件和錢。",
         hint: "錢包裏面有什麼？他們的表情怎樣？",
-        image: "comics/wallet/2.jpg",
+        image: "comics/wallet/2.jpg?v=3",
       },
       {
         caption: "兩人把錢包交給公園管理員叔叔。",
         hint: "他們把錢包交給誰？為什麼？",
-        image: "comics/wallet/3.jpg",
+        image: "comics/wallet/3.jpg?v=3",
       },
       {
         caption: "失主回來多謝兩個小朋友。",
         hint: "後來怎樣？失主的心情如何？",
-        image: "comics/wallet/4.jpg",
+        image: "comics/wallet/4.jpg?v=3",
       },
     ],
     starters: [
@@ -122,17 +122,17 @@ window.STORIES = [
       {
         caption: "其他人繼續跑，樂樂停下來走過去。",
         hint: "別的小朋友怎樣？樂樂怎樣？",
-        image: "comics/fall/2.jpg?v=2",
+        image: "comics/fall/2.jpg?v=3",
       },
       {
         caption: "樂樂和安安扶起同學，陪他走。",
         hint: "他們怎樣幫助同學？",
-        image: "comics/fall/3.jpg?v=2",
+        image: "comics/fall/3.jpg?v=3",
       },
       {
         caption: "護士幫同學搽藥，同學多謝樂樂。",
         hint: "後來誰來幫忙？結果怎樣？",
-        image: "comics/fall/4.jpg?v=4",
+        image: "comics/fall/4.jpg?v=3",
       },
     ],
     starters: [
@@ -220,22 +220,22 @@ window.STORIES = [
       {
         caption: "小朋友在小食部排隊買東西。",
         hint: "他們在做什麼？隊伍整齊嗎？",
-        image: "comics/queue/1.jpg",
+        image: "comics/queue/1.jpg?v=3",
       },
       {
         caption: "有人忽然插到隊伍前面。",
         hint: "發生了什麼問題？大家的表情怎樣？",
-        image: "comics/queue/2.jpg",
+        image: "comics/queue/2.jpg?v=3",
       },
       {
         caption: "安安有禮貌地請他到後面排隊。",
         hint: "安安怎樣說？有沒有發脾氣？",
-        image: "comics/queue/3.jpg",
+        image: "comics/queue/3.jpg?v=3",
       },
       {
         caption: "那位同學走到隊尾，大家繼續排隊。",
         hint: "結果怎樣？安安的做法好在哪裏？",
-        image: "comics/queue/4.jpg",
+        image: "comics/queue/4.jpg?v=3",
       },
     ],
     starters: [
@@ -323,22 +323,22 @@ window.STORIES = [
       {
         caption: "樂樂和安安在公園散步，草地上有膠樽。",
         hint: "地上有什麼不應該在那裏？",
-        image: "comics/litter/1.jpg",
+        image: "comics/litter/1.jpg?v=3",
       },
       {
         caption: "樂樂看見回收桶，想一想該怎樣做。",
         hint: "附近有什麼？他在想什麼？",
-        image: "comics/litter/2.jpg",
+        image: "comics/litter/2.jpg?v=3",
       },
       {
         caption: "樂樂拾起膠樽，走向回收桶。",
         hint: "他決定怎樣做？",
-        image: "comics/litter/3.jpg",
+        image: "comics/litter/3.jpg?v=3",
       },
       {
         caption: "膠樽進了回收桶，公園變得更乾淨。",
         hint: "結果怎樣？他們的心情如何？",
-        image: "comics/litter/4.jpg",
+        image: "comics/litter/4.jpg?v=3",
       },
     ],
     starters: [
@@ -430,17 +430,17 @@ window.STORIES = [
       {
         caption: "安安看見同學難過，看了看自己的食物。",
         hint: "安安發現了什麼？她的心情怎樣？",
-        image: "comics/lunch/2.jpg?v=4",
+        image: "comics/lunch/2.jpg?v=3",
       },
       {
         caption: "安安把三文治分開，分給同學。",
         hint: "她怎樣幫助同學？",
-        image: "comics/lunch/3.jpg?v=4",
+        image: "comics/lunch/3.jpg?v=3",
       },
       {
         caption: "兩人一起吃飯，都笑了。",
         hint: "結果怎樣？分享之後有什麼感覺？",
-        image: "comics/lunch/4.jpg?v=4",
+        image: "comics/lunch/4.jpg?v=3",
       },
     ],
     starters: [
@@ -527,22 +527,22 @@ window.STORIES = [
       {
         caption: "樂樂在客廳玩球，球飛向花瓶。",
         hint: "他在哪裏？在做什麼？危險嗎？",
-        image: "comics/vase/1.jpg",
+        image: "comics/vase/1.jpg?v=3",
       },
       {
         caption: "花瓶打破了，樂樂嚇了一跳。",
         hint: "發生了什麼事？他的表情怎樣？",
-        image: "comics/vase/2.jpg",
+        image: "comics/vase/2.jpg?v=3",
       },
       {
         caption: "樂樂拿着碎片，誠實告訴媽媽。",
         hint: "他選擇怎樣做？有沒有隱瞞？",
-        image: "comics/vase/3.jpg",
+        image: "comics/vase/3.jpg?v=3",
       },
       {
         caption: "媽媽沒有罵得很兇，兩人一起收拾。",
         hint: "媽媽怎樣？後來他們做什麼？",
-        image: "comics/vase/4.jpg",
+        image: "comics/vase/4.jpg?v=3",
       },
     ],
     starters: [
